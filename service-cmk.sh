@@ -1,14 +1,17 @@
 #!/usr/bin/env bash
 
-# Source the configuration file
-source conf/setup.conf
-
-# Set colors for script output
+# COLORS
 NC='\033[0m'
 SUCCESS='\033[0;32m'
 ERROR='\033[0;31m'
 WARNING='\033[0;33m'
 INFO='\033[0;34m'
+
+# SOURCE SETUP.CONF
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
+if [[ -f "$SCRIPT_DIR/conf/setup.conf" ]]; then
+    source "$SCRIPT_DIR/conf/setup.conf"
+fi
 
 echo -e "${INFO}##### Package: Update ${NC}"
 apt --assume-yes update
