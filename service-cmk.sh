@@ -6,34 +6,48 @@ set -euo pipefail
 NC='\033[0m'
 SUCCESS='\033[0;32m'
 ERROR='\033[0;31m'
-WARN='\033[0;33m'
-INFO='\033[0;34m'
+WARN='\033[1;33m'
+INFO='\033[1;34m'
 
-# SOURCE SETUP.CONF
+# FALSE = run inside VM, TRUE = run remotely via xxclustersh
+IS_REMOTE=TRUE
+
+# SOURCE SCRIPT DIRECTORY
 if [[ -n "${BASH_SOURCE[0]:-}" && "${BASH_SOURCE[0]}" != "bash" && "${BASH_SOURCE[0]}" != "-bash" ]]; then
     SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 else
     SCRIPT_DIR="$(pwd)"
 fi
 
+# SOURCE SETUP.CONF
+if [[ "$IS_REMOTE" == FALSE ]]; then
+    CONFIG_FILE="${SCRIPT_DIR}/conf/setup.conf"
+    if [[ -f "$CONFIG_FILE" ]]; then
+        source "$CONFIG_FILE"
+    else
+        echo -e "${ERROR}  ERROR: Missing configuration file: $CONFIG_FILE${NC}"
+        exit 1
+    fi
+fi
+
 # USAGE
 usage() {
-    echo -e "${INFO} #####################################################################${NC}"
-    echo -e "${INFO} #                   Install (CMK) Service - Usage Guide             #${NC}"
-    echo -e "${INFO} #####################################################################${NC}"
+    echo -e "${INFO}  #####################################################################${NC}"
+    echo -e "${INFO}  #                Install (CMK) Service - Usage Guide                #${NC}"
+    echo -e "${INFO}  #####################################################################${NC}"
     echo -e ""
-    echo -e "${INFO} Usage:${NC}"
-    echo -e "${WARN}   sudo bash -x ./[SCRIPT_NAME]${NC}"
+    echo -e "${INFO}  Usage:${NC}"
+    echo -e "${WARN}    sudo bash -x ./[SCRIPT_NAME]${NC}"
     echo -e ""
-    echo -e "${INFO} Description:${NC}"
-    echo -e "   This script installs and configures CheckMK (CMK) services"
+    echo -e "${INFO}  Description:${NC}"
+    echo -e "    This script installs and configures CheckMK (CMK) services"
     echo -e ""
-    echo -e "${INFO} Requirements:${NC}"
-    echo -e "   - Must be run as root (use sudo)"
-    echo -e "   - Make sure conf/setup.conf is present with valid variables"
+    echo -e "${INFO}  Requirements:${NC}"
+    echo -e "    - Must be run as root (use sudo)"
+    echo -e "    - Make sure conf/setup.conf is present with valid variables"
     echo -e ""
-    echo -e "${INFO} Example:${NC}"
-    echo -e "   sudo bash -x ./service-cmk.sh"
+    echo -e "${INFO}  Example:${NC}"
+    echo -e "    sudo bash -x ./service-cmk.sh"
     echo -e ""
     exit 1
 }
