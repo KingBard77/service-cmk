@@ -87,9 +87,9 @@ ln -sf "/etc/systemd/system/check-mk-raw-${OMD_VERSION}.service" "/etc/systemd/s
 echo -e "${INFO}  ##### CMK: Systemd ${NC}"
 systemctl daemon-reload
 
-echo -e "${INFO}  ##### CMK: Service ${NC}"
-systemctl enable "check-mk-raw-${OMD_VERSION}.service"
-systemctl restart "check-mk-raw-${OMD_VERSION}.service"
+#echo -e "${INFO}  ##### CMK: Service ${NC}"
+#systemctl enable "check-mk-raw-${OMD_VERSION}.service"
+#systemctl restart "check-mk-raw-${OMD_VERSION}.service"
 
 echo -e "${INFO}  ##### CMK: Credential ${NC}"
 su - "$CMK_SITE_NAME" -c "sed -i '\$ s/})/, '\''$CMK_USER_NAME'\'': {'\''alias'\'': '\''$CMK_USER_ALIAS'\'', '\''roles'\'': ['\''$CMK_USER_ROLE'\''], '\''locked'\'': False, '\''connector'\'': '\''htpasswd'\''}})/' \"/omd/sites/$CMK_SITE_NAME/etc/check_mk/multisite.d/wato/users.mk\""
@@ -109,7 +109,7 @@ echo -e "${INFO}  ##### CMK: Clean ${NC}"
 apt --assume-yes autoremove
 apt --assume-yes autoclean
 
-echo -e "${SUCCESS}#### CMK: Install Complete #####${NC}"
+echo -e "${SUCCESS} #### CMK: Install Complete #####${NC}"
 
 echo -e "${INFO}#### Reboot ${NC}"
 #reboot
